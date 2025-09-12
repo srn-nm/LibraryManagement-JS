@@ -1,3 +1,88 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پروژه نهایی جاوااسکریپت - دوره‌ی ۱۱</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 2em;
+            margin-bottom: 1em;
+        }
+        h1 {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f1f2f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Vazirmatn', monospace;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+        }
+        ul, ol {
+            padding-right: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        blockquote {
+            border-right: 4px solid #3498db;
+            margin: 0;
+            padding-right: 15px;
+            background-color: #ecf0f1;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .api-endpoint {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border-right: 3px solid #27ae60;
+        }
+        .important {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
 # پروژه نهایی جاوااسکریپت - دوره‌ی ۱۱
 
 ## سیستم مدیریت کتابخانه
@@ -23,8 +108,8 @@
 ابتدا فایل‌های قالب پروژه را از مخزن کلون کنید:
 
 ```bash
-git clone [آدرس مخزن قالب‌ها]
-cd library-templates
+git clone git@github.com:karyar-js11/library-management-system-template.git
+cd library-management-system-template
 ```
 
 ### 2. آدرس API
@@ -238,3 +323,6 @@ library-templates/
 **موفق باشید!** 🚀
 
 برای سوالات و راهنمایی بیشتر، با استاد تماس بگیرید.
+
+</body>
+</html>
