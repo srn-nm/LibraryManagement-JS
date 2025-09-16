@@ -49,7 +49,7 @@ library-templates/
 ├── images/                # پوشه تصاویر
 ├── index.html             # صفحه اصلی
 ├── login.html             # صفحه ورود
-├── student-dashboard.html # داشبورد دانشجو
+├── dashboard.html # داشبورد دانشجو
 ├── books.html             # صفحه کتاب‌ها
 ├── my-loans.html          # صفحه امانت‌های من
 └── README.md              # این فایل
@@ -103,7 +103,7 @@ library-templates/
 4. ‫توکن در کوکی ذخیره می‌شود (بدون HttpOnly)
 5. ‫کاربر به صفحه داشبورد هدایت می‌شود
 
-### 2. ‫داشبورد دانشجو (student-dashboard.html)
+### 2. ‫داشبورد دانشجو (dashboard.html)
 - ‫نمایش نام کاربر
 - ‫نمایش آمار (تعداد امانت‌های فعال، کتاب‌های موجود)
 - ‫دکمه‌های دسترسی سریع
