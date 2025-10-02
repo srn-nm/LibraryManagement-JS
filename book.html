@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">📚 Library Management</div>
+                <nav class="nav">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="books.html">Browse Books</a>
+                    <a href="my-loans.html">My Loans</a>
+                    <a href="login.html">Logout</a>
+                </nav>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">S</div>
+                    <span id="userName">Student Name</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="title" class="card-title" style="font-size: 1.3rem;">Book Title Example</h2>
+                    <span id="status" class="status status-available">Available</span>
+                </div>
+
+                <img id="book-image" src="" alt="Book Cover" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 6px; margin-bottom: 1rem;">
+
+
+                <div class="card-body" style="font-size: 1rem;">
+                    <p id="author"><strong>Author: </strong> John Doe</p>
+                    <p id="isbn"><strong>ISBN: </strong> 123-4567890123</p>
+                    <p id="categoryName"><strong>Category: </strong> Science Fiction</p>
+                    <p id="publisher"><strong>Publisher: </strong>publisher</p>
+                    <p id="publicationYear"><strong>Published: </strong> 2022</p>
+                    <p id="description"><strong>Description:</strong>description</p>
+
+                    <p id="availableCopies"><strong>Available Copies: </strong> 5</p>
+                    <p id="totalCopies"><strong>Total Copies: </strong> 5</p>
+                    <p id="borrowedCopies"><strong>Borrowed Copies: </strong> 5</p>
+
+                    <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+
+                </div>
+
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary btn-sm" style="font-size: 1rem;">Borrow Book</button>
+                    </div>
+                    <a href="books.html" class="btn btn-secondary btn-sm" style="font-size: 1rem;">Back</a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/book.js" type="module"></script>
+</body>
+</html>
+
+
+const coverImage = document.getElementById("coverImage");
+const tags = document.getElementById("tags");

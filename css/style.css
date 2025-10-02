@@ -97,10 +97,29 @@ body {
     font-size: 0.9rem;
 }
 
+.card-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.card-body p {
+    margin-bottom: 0.75rem;
+}
+
 .card-footer {
     margin-top: auto;
     display: flex;
     gap: 0.5rem;
+}
+
+.card-footer .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px; 
+    padding: 0 1rem;
 }
 
 .card-header {

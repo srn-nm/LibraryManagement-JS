@@ -63,6 +63,8 @@ async function getBooks() {
             const card = document.createElement("div");
             card.classList.add("card");
 
+            card.id = book.id;
+
             card.innerHTML = `
                 <div class="card-header">
                     <h3 class="card-title">${book.title}</h3>
@@ -72,18 +74,24 @@ async function getBooks() {
                 </div>
                 <p><strong>Author:</strong> ${book.author}</p>
                 <p><strong>ISBN:</strong> ${book.isbn}</p>
-                <p><strong>Category:</strong> ${book.category?.name || ''}</p>
+                <p><strong>Category:</strong> ${book.category?.name}</p>
                 <p><strong>Available Copies:</strong> ${book.availableCopies}</p>
                 <p class="mb-2">${book.description}</p>
                 <div class="card-footer">
                     ${book.status === "available" 
                         ? `<button class="btn btn-primary btn-sm">Borrow Book</button>` 
                         : `<button class="btn btn-secondary btn-sm" disabled>Not Available</button>`}
-                    <button class="btn btn-secondary btn-sm">View Details</button>
+                    <button class="btn btn-secondary btn-sm view-details">View Details</button>
                 </div>
             `;
 
             booksGrid.appendChild(card);
+
+            const viewBtn = card.querySelector(".view-details");
+            viewBtn.addEventListener("click", () => {
+                window.location.href = `../book.html?id=${book.id}`;
+            });
+
         });
 
         console.log(responseData);
@@ -91,7 +99,7 @@ async function getBooks() {
     } catch (error) {
         console.error("Failed to load books list: " + error);
         alert("Failed to load books list: " + error.message);
-        window.location.href = '../login.html';
+        window.location.href = '../dashboard.html';
     } 
 }
 
