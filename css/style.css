@@ -369,6 +369,17 @@ body {
     border-color: #3498db;
 }
 
+/* Tag */
+.tag {
+    background: #d4edda;
+    color: #213c94;
+    border: 1px solid #c3e6cb;
+    margin: 0.3rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0rem;
+    border-radius: 3px;
+}
+
 /* Alerts */
 .alert {
     margin: 0;         

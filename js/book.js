@@ -1,6 +1,5 @@
 const params = new URLSearchParams(window.location.search);
 const bookId = params.get("id");
-console.log(bookId);
 
 const userName = document.getElementById("userName");
 const loader = document.getElementById("loader");
@@ -12,12 +11,11 @@ const categoryName = document.getElementById("categoryName");
 const publicationYear = document.getElementById("publicationYear");
 const availableCopies = document.getElementById("availableCopies");
 const description = document.getElementById("description");
+const borrowButton = document.getElementById("borrowButton")
 
 const totalCopies = document.getElementById("totalCopies");
-const borrowedCopies = document.getElementById("borrowedCopies");
-const coverImage = document.getElementById("coverImage");
 const publisher = document.getElementById("publisher");
-const tags = document.getElementById("tags");
+const tags = document.getElementById("tags-container");
 
 function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -48,7 +46,6 @@ async function getUsername() {
 
         userName.textContent = data.data.user.firstName + " " + data.data.user.lastName;
 
-        console.log(data);
         
     } catch (error) {
         console.error("Failed to load userName " + error);
@@ -74,24 +71,31 @@ async function getBook() {
             throw new Error(responseData.message);
         }
 
-        title.textContent = responseData.book.title;
-        status.textContent = responseData.book.status;
-        author.textContent = responseData.book.author;
-        isbn.textContent = responseData.book.isbn;
-        categoryName.textContent = responseData.book.categoryName;
-        publicationYear.textContent = responseData.book.publicationYear;
-        description.textContent = responseData.book.description;
-
-        totalCopies.textContent = responseData.book.totalCopies;
-        availableCopies.textContent = responseData.book.availableCopies;
-        borrowedCopies.textContent = responseData.book.borrowedCopies;
-
-        coverImage.textContent = responseData.book.coverImage;
-        publisher.textContent = responseData.book.publisher;
-        tags.textContent = responseData.book.tags;
-
-
         console.log(responseData);
+
+        title.textContent = responseData.title;
+        if (responseData.status === "available") {
+            status.innerHTML = `<span class="status status-available">Available</span>`;
+            borrowButton.innerHTML = '<button class="btn btn-primary btn-sm borrow-btn" style="font-size: 1rem;">Borrow Book</button>';
+        
+        } else {
+            status.innerHTML = `<span class="status status-unavailable">Unavailable</span>`;
+            borrowButton.innerHTML = '<button class="btn btn-secondary btn-sm" disabled style="font-size: 1rem;">Not Available</button>';
+        }
+    
+        author.textContent = responseData.author;
+        isbn.textContent = responseData.isbn;
+        categoryName.textContent = responseData.category || "not specified";
+        publicationYear.textContent = responseData.publicationYear;
+        description.textContent = responseData.description;
+
+        totalCopies.textContent = responseData.totalCopies;
+        availableCopies.textContent = responseData.availableCopies;
+
+        publisher.textContent = responseData.publisher;
+
+        getTags(responseData);
+
 
     } catch (error) {
         console.error("Failed to load book: " + error);
@@ -100,20 +104,18 @@ async function getBook() {
     } 
 }
 
-function getTagsandImage() {
+function getTags(responseData) {
     const tagsContainer = document.getElementById("tags-container");
 
-    tags.forEach(tag => {
+    console.log(tags)
+    responseData.tags.forEach(tag => {
         const tagDiv = document.createElement("div");
         tagDiv.classList.add("status"); 
+        tagDiv.classList.add("tag"); 
         tagDiv.style.fontSize = "0.8rem";
-        tagDiv.textContent = tag;
+        tagDiv.textContent = "#" + tag;
         tagsContainer.appendChild(tagDiv);
     });
-
-    const imageUrl = coverImage;
-    const bookImage = document.getElementById("book-image");
-    bookImage.src = imageUrl;
 }
 
 async function getDatas() { 
@@ -122,7 +124,6 @@ async function getDatas() {
     try {
         await getUsername();
         await getBook();
-        getTagsandImage();
     } catch (err) {
         console.error("Error loading data:", err);
     } finally {

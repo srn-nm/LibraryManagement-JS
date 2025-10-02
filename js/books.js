@@ -31,6 +31,7 @@ async function getUsername() {
         const responseData = await response.json();
 
         userName.textContent = responseData.data.user.firstName + " " + responseData.data.user.lastName;
+        localStorage.setItem("userID", responseData.data.user.id);
 
         console.log(responseData);
         
@@ -92,11 +93,12 @@ async function getBooks() {
                 window.location.href = `../book.html?id=${book.id}`;
             });
 
-            const borrowBtn = card.querySelector(".borrow-btn");
-            viewBtn.addEventListener("click", () => {
-                borrowBook(book.id)
+            if (book.status === "available") {
+                const borrowBtn = card.querySelector(".borrow-btn");
+            borrowBtn.addEventListener("click", () => {
+                borrowBook(localStorage.getItem("userID"), book.id)
             });
-
+            }
         });
 
         console.log(responseData);
@@ -108,8 +110,46 @@ async function getBooks() {
     } 
 }
 
-async function borrowBook(id) {
-    
+async function borrowBook(userID, bookID) {
+    const now = new Date();
+    const futureDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    const isoString = futureDate.toISOString();
+
+     try {
+        const apiURL = `https://karyar-library-management-system.liara.run/api/loans`;
+        const response = await fetch(apiURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getCookie("token")
+            },
+            body: JSON.stringify({
+                "bookId": bookID,
+                "userId": userID,
+                "loanPeriod": 14,
+                "dueDate": isoString
+            }),
+        });
+
+        if (!response.ok) {
+            const errorJson = await response.json();
+            throw new Error(errorJson.message || 'Authentication failed');
+        }
+
+        const responseData = await response.json();
+        alert("Loaning Successfull!");
+
+        const borrowBtn = document.getElementById(bookID).querySelector(".borrow-btn");
+        borrowBtn.textContent = "Borrowed";
+        borrowBtn.disabled = true;
+        borrowBtn.classList.remove("btn-primary");
+        borrowBtn.classList.add("btn-secondary");
+        
+    } catch (error) {
+        console.error("Failed to load Username: " + error);
+        alert("Failed to load Username: " + error.message);
+        window.location.href = '../dashboard.html';
+    } 
 }
 
 async function getDatas() { 

@@ -33,31 +33,27 @@
             <div class="card">
                 <div class="card-header">
                     <h2 id="title" class="card-title" style="font-size: 1.3rem;">Book Title Example</h2>
-                    <span id="status" class="status status-available">Available</span>
+                    <div id="status"></div>
                 </div>
 
-                <img id="book-image" src="" alt="Book Cover" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 6px; margin-bottom: 1rem;">
-
-
                 <div class="card-body" style="font-size: 1rem;">
-                    <p id="author"><strong>Author: </strong> John Doe</p>
-                    <p id="isbn"><strong>ISBN: </strong> 123-4567890123</p>
-                    <p id="categoryName"><strong>Category: </strong> Science Fiction</p>
-                    <p id="publisher"><strong>Publisher: </strong>publisher</p>
-                    <p id="publicationYear"><strong>Published: </strong> 2022</p>
-                    <p id="description"><strong>Description:</strong>description</p>
+                    <p><strong>Author: </strong> <span id="author"></span></p>
+                    <p><strong>ISBN: </strong><span id="isbn"></span></p>
+                    <p><strong>Category: </strong><span id="categoryName"></span></p>
+                    <p><strong>Publisher: </strong><span id="publisher"></span></p>
+                    <p><strong>Published: </strong><span id="publicationYear"></span></p>
+                    <p><strong>Description: </strong><span id="description"></span></p>
 
-                    <p id="availableCopies"><strong>Available Copies: </strong> 5</p>
-                    <p id="totalCopies"><strong>Total Copies: </strong> 5</p>
-                    <p id="borrowedCopies"><strong>Borrowed Copies: </strong> 5</p>
+                    <p><strong>Available Copies: </strong><span id="availableCopies"></span></p>
+                    <p><strong>Total Copies: </strong><span id="totalCopies"></span></p>
 
-                    <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><span id="tags-container" ></span></div>
 
                 </div>
 
                 <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-primary btn-sm" style="font-size: 1rem;">Borrow Book</button>
+                        <div id="borrowButton"></div>
                     </div>
                     <a href="books.html" class="btn btn-secondary btn-sm" style="font-size: 1rem;">Back</a>
                 </div>
