@@ -79,7 +79,7 @@ async function getBooks() {
                 <p class="mb-2">${book.description}</p>
                 <div class="card-footer">
                     ${book.status === "available" 
-                        ? `<button class="btn btn-primary btn-sm">Borrow Book</button>` 
+                        ? `<button class="btn btn-primary btn-sm borrow-btn">Borrow Book</button>` 
                         : `<button class="btn btn-secondary btn-sm" disabled>Not Available</button>`}
                     <button class="btn btn-secondary btn-sm view-details">View Details</button>
                 </div>
@@ -92,6 +92,11 @@ async function getBooks() {
                 window.location.href = `../book.html?id=${book.id}`;
             });
 
+            const borrowBtn = card.querySelector(".borrow-btn");
+            viewBtn.addEventListener("click", () => {
+                borrowBook(book.id)
+            });
+
         });
 
         console.log(responseData);
@@ -101,6 +106,10 @@ async function getBooks() {
         alert("Failed to load books list: " + error.message);
         window.location.href = '../dashboard.html';
     } 
+}
+
+async function borrowBook(id) {
+    
 }
 
 async function getDatas() { 
