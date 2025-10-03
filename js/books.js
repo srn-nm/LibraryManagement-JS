@@ -11,6 +11,37 @@ function getCookie(name) {
     return null; 
 }
 
+
+async function getLoansList() {
+    try {
+        const apiURL = `https://karyar-library-management-system.liara.run/api/loans/my-loans`;
+        const response = await fetch(apiURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getCookie("token")
+            }
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+            throw new Error(responseData.message);
+        }
+
+        localStorage.setItem("my-loans", JSON.stringify(responseData.data));   // in responseData.data alan araye ast
+
+    } catch (error) {
+        console.error("Failed to load Loans list: " + error);
+        alert("Failed to load Loans list: " + error.message);
+        window.location.href = '../dashboard.html';
+    }
+}
+
+function isThisBookAlreadyBorrowedByMe(bookID) {
+    let loans = JSON.parse(localStorage.getItem("my-loans")) || [];
+    return loans.some(loan => loan.book.id === bookID && loan.status === "active");
+}
+
 async function getUsername() {
 
     try {
@@ -80,7 +111,9 @@ async function getBooks() {
                 <p class="mb-2">${book.description}</p>
                 <div class="card-footer">
                     ${book.status === "available" 
-                        ? `<button class="btn btn-primary btn-sm borrow-btn">Borrow Book</button>` 
+                        ? isThisBookAlreadyBorrowedByMe(book.id)
+                            ? `<button class="btn btn-secondary btn-sm">Borrowed</button>` 
+                            : `<button class="btn btn-primary btn-sm borrow-btn">Borrow Book</button>` 
                         : `<button class="btn btn-secondary btn-sm" disabled>Not Available</button>`}
                     <button class="btn btn-secondary btn-sm view-details">View Details</button>
                 </div>
@@ -93,11 +126,11 @@ async function getBooks() {
                 window.location.href = `../book.html?id=${book.id}`;
             });
 
-            if (book.status === "available") {
+            if (book.status === "available" && !isThisBookAlreadyBorrowedByMe(book.id)) {
                 const borrowBtn = card.querySelector(".borrow-btn");
-            borrowBtn.addEventListener("click", () => {
-                borrowBook(localStorage.getItem("userID"), book.id)
-            });
+                borrowBtn.addEventListener("click", () => {
+                    borrowBook(localStorage.getItem("userID"), book.id)
+                });
             }
         });
 
@@ -144,6 +177,10 @@ async function borrowBook(userID, bookID) {
         borrowBtn.disabled = true;
         borrowBtn.classList.remove("btn-primary");
         borrowBtn.classList.add("btn-secondary");
+
+        let loans = JSON.parse(localStorage.getItem("my-loans")) || [];
+        loans.push(responseData.loan);
+        localStorage.setItem("my-loans", JSON.stringify(loans));
         
     } catch (error) {
         console.error("Failed to load Username: " + error);
@@ -157,6 +194,7 @@ async function getDatas() {
 
     try {
         await getUsername();
+        await getLoansList();
         await getBooks();
     } catch (err) {
         console.error("Error loading data:", err);
