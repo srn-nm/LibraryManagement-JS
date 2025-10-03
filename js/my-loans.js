@@ -6,6 +6,16 @@ const totalLoans = document.getElementById("totalLoans");
 const activeLoans = document.getElementById("activeLoans");
 const returnedBooks = document.getElementById("returnedBooks");
 
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.cookie = "token=; path=/; max-age=0";
+        localStorage.clear();
+        window.location.href = "login.html";
+    });
+}
+
 function getCookie(name) {
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
