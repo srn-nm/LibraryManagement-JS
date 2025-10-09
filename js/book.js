@@ -67,8 +67,6 @@ async function getBook() {
             throw new Error(responseData.message);
         }
 
-        console.log(responseData);
-
         title.textContent = responseData.title;
 
         const alreadyBorrowed = isThisBookAlreadyBorrowedByMe(bookId);
@@ -107,7 +105,6 @@ async function getBook() {
 function getTags(responseData) {
     const tagsContainer = document.getElementById("tags-container");
 
-    console.log(tags)
     responseData.tags.forEach(tag => {
         const tagDiv = document.createElement("div");
         tagDiv.classList.add("status"); 
@@ -117,7 +114,6 @@ function getTags(responseData) {
         tagsContainer.appendChild(tagDiv);
     });
 }
-
 
 async function getDatas() { 
     loader.style.display = "flex"; 
@@ -138,6 +134,5 @@ async function getDatas() {
         loader.style.display = "none"; 
     }
 }
-
 
 getDatas();

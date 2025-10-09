@@ -35,7 +35,6 @@ async function getUsername() {
         userName.textContent = data.user.firstName + " " + data.user.lastName;
         userAvatar.textContent = data.user.firstName[0].toUpperCase();
         localStorage.setItem("userID", data.user.id);
-        console.log(data);
     } catch (error) {
         console.error("Failed to load Username: " + error);
     } 
@@ -83,7 +82,6 @@ async function getBooks() {
                 });
             }
         });
-        console.log(responseData);
     } catch (error) {
         console.error("Failed to load books list: " + error);
     } 
@@ -111,6 +109,7 @@ async function borrowBook(userID, bookID) {
         let loans = JSON.parse(localStorage.getItem("my-loans")) || [];
         loans.push(loan);
         localStorage.setItem("my-loans", JSON.stringify(loans));
+        console.log("book borrowed.")
     } catch (error) {
         console.error("Failed to borrow book: " + error);
     } 
@@ -131,3 +130,5 @@ async function loadData() {
         loader.style.display = "none";
     }
 }
+
+loadData();

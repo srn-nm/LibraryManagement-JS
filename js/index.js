@@ -20,19 +20,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const hasToken = getCookie("token");
     document.getElementById("get-started-btn").href = hasToken ? "dashboard.html" : "login.html";
 
-    if (hasToken) {
-        const fullName = await getMe();
-        if (fullName) {
-            const initials = fullName[0].toUpperCase();
-            document.getElementById("login-check").innerHTML = `
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar">${initials}</div>
-                    <span id="userName">${fullName}</span>
-                </div>
-            `;
+    checkToken();
+    
+    async function checkToken() {
+        if (hasToken) {
+            const fullName = await getMe();
+            if (fullName) {
+                const initials = fullName[0].toUpperCase();
+                document.getElementById("login-check").innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">${initials}</div>
+                        <span id="userName">${fullName}</span>
+                    </div>
+                `;
+            }
+        } else {
+            document.getElementById("login-check").innerHTML = `<a href="login.html">Login</a>`;
+            loader.style.display = "none";
         }
-    } else {
-        document.getElementById("login-check").innerHTML = `<a href="login.html">Login</a>`;
-        loader.style.display = "none";
     }
+    
 });
