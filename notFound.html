@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - 404</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="login-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Error 404</h1>
+            <h2 class="login-title" style="font-size: 1rem; margin-top: 0;">Page Not Found</h2>
+            
+            <button id="goBackBtn" class="btn btn-primary" style="width: 100%; font-size: 1rem; margin-top: 1rem;">
+                Go Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const goBackBtn = document.getElementById("goBackBtn");
+        goBackBtn.addEventListener("click", () => {
+            window.location.href = "../dashboard.html";
+        });
+    </script>
+</body>
+</html>

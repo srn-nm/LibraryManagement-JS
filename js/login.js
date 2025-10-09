@@ -26,6 +26,15 @@ async function handleLogin(dataSending) {
     document.cookie = `token=${responseData.token}; max-age=7200; path=/`;     // 2 hours
 }
 
+function resetButton() {
+    loginText.textContent = 'Login';
+    loginSpinner.classList.add('hidden');
+}
+
+function showAlert(message, type) {
+    alertContainer.innerHTML = `<div class="alert-${type}">${message}</div>`;
+}
+
 
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
@@ -52,11 +61,3 @@ loginForm.addEventListener('submit', async (e) => {
     }
 });
 
-function resetButton() {
-    loginText.textContent = 'Login';
-    loginSpinner.classList.add('hidden');
-}
-
-function showAlert(message, type) {
-    alertContainer.innerHTML = `<div class="alert-${type}">${message}</div>`;
-}

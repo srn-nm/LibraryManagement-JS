@@ -1,6 +1,9 @@
+import { apiFetch, getCookie } from "./utils/api.js";
+
 const userName = document.getElementById("userName");
 const loader = document.getElementById("loader");
 const booksGrid = document.getElementById("books-grid");
+const userAvatar = document.getElementById("userAvatar");
 
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
@@ -12,38 +15,12 @@ if (logoutBtn) {
     });
 }
 
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [key, value] = cookie.trim().split('='); 
-        if (key === name) return decodeURIComponent(value);
-    }
-    return null; 
-}
-
-
 async function getLoansList() {
     try {
-        const apiURL = `https://karyar-library-management-system.liara.run/api/loans/my-loans`;
-        const response = await fetch(apiURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getCookie("token")
-            }
-        });
-
-        const responseData = await response.json();
-        if (!response.ok) {
-            throw new Error(responseData.message);
-        }
-
-        localStorage.setItem("my-loans", JSON.stringify(responseData.data));   // in responseData.data alan araye ast
-
+        const {data} = await apiFetch("/loans/my-loans");
+        localStorage.setItem("my-loans", JSON.stringify(data));
     } catch (error) {
         console.error("Failed to load Loans list: " + error);
-        alert("Failed to load Loans list: " + error.message);
-        window.location.href = '../dashboard.html';
     }
 }
 
@@ -53,60 +30,25 @@ function isThisBookAlreadyBorrowedByMe(bookID) {
 }
 
 async function getUsername() {
-
     try {
-        const apiURL = `https://karyar-library-management-system.liara.run/api/auth/me`;
-        const response = await fetch(apiURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getCookie("token")
-            }
-        });
-
-        if (!response.ok) {
-            const errorJson = await response.json();
-            throw new Error(errorJson.message || 'Authentication failed');
-        }
-
-        const responseData = await response.json();
-
-        userName.textContent = responseData.data.user.firstName + " " + responseData.data.user.lastName;
-        localStorage.setItem("userID", responseData.data.user.id);
-
-        console.log(responseData);
-        
+        const {data} = await apiFetch("/auth/me");
+        userName.textContent = data.user.firstName + " " + data.user.lastName;
+        userAvatar.textContent = data.user.firstName[0].toUpperCase();
+        localStorage.setItem("userID", data.user.id);
+        console.log(data);
     } catch (error) {
         console.error("Failed to load Username: " + error);
-        alert("Failed to load Username: " + error.message);
-        window.location.href = '../dashboard.html';
     } 
 }
 
 async function getBooks() {
     try {
-        const apiURL = `https://karyar-library-management-system.liara.run/api/books`;
-        const response = await fetch(apiURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getCookie("token")
-            }
-        });
-
-        const responseData = await response.json();
-        if (!response.ok) {
-            throw new Error(responseData.message || 'Getting Books List failed');
-        }
-
+        const responseData = await apiFetch("/books");
         booksGrid.innerHTML = ""; 
-
         responseData.data.forEach(book => {
             const card = document.createElement("div");
             card.classList.add("card");
-
             card.id = book.id;
-
             card.innerHTML = `
                 <div class="card-header">
                     <h3 class="card-title">${book.title}</h3>
@@ -120,22 +62,20 @@ async function getBooks() {
                 <p><strong>Available Copies:</strong> ${book.availableCopies}</p>
                 <p class="mb-2">${book.description}</p>
                 <div class="card-footer">
-                    ${book.status === "available" 
-                        ? isThisBookAlreadyBorrowedByMe(book.id)
-                            ? `<button class="btn btn-secondary btn-sm">Borrowed</button>` 
-                            : `<button class="btn btn-primary btn-sm borrow-btn">Borrow Book</button>` 
-                        : `<button class="btn btn-secondary btn-sm" disabled>Not Available</button>`}
+                    ${isThisBookAlreadyBorrowedByMe(book.id)
+                        ? `<button class="btn btn-secondary btn-sm">Borrowed</button>`
+                        : book.status === "available"
+                            ? `<button class="btn btn-primary btn-sm borrow-btn">Borrow Book</button>`
+                            : `<button class="btn btn-secondary btn-sm" disabled>Not Available</button>`}
+
                     <button class="btn btn-secondary btn-sm view-details">View Details</button>
                 </div>
             `;
-
             booksGrid.appendChild(card);
-
             const viewBtn = card.querySelector(".view-details");
             viewBtn.addEventListener("click", () => {
                 window.location.href = `../book.html?id=${book.id}`;
             });
-
             if (book.status === "available" && !isThisBookAlreadyBorrowedByMe(book.id)) {
                 const borrowBtn = card.querySelector(".borrow-btn");
                 borrowBtn.addEventListener("click", () => {
@@ -143,13 +83,9 @@ async function getBooks() {
                 });
             }
         });
-
         console.log(responseData);
-
     } catch (error) {
         console.error("Failed to load books list: " + error);
-        alert("Failed to load books list: " + error.message);
-        window.location.href = '../dashboard.html';
     } 
 }
 
@@ -157,15 +93,9 @@ async function borrowBook(userID, bookID) {
     const now = new Date();
     const futureDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
     const isoString = futureDate.toISOString();
-
-     try {
-        const apiURL = `https://karyar-library-management-system.liara.run/api/loans`;
-        const response = await fetch(apiURL, {
+    try {
+        const {loan} = await apiFetch("/loans", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getCookie("token")
-            },
             body: JSON.stringify({
                 "bookId": bookID,
                 "userId": userID,
@@ -173,44 +103,31 @@ async function borrowBook(userID, bookID) {
                 "dueDate": isoString
             }),
         });
-
-        if (!response.ok) {
-            const errorJson = await response.json();
-            throw new Error(errorJson.message || 'Authentication failed');
-        }
-
-        const responseData = await response.json();
-        alert("Loaning Successfull!");
-
         const borrowBtn = document.getElementById(bookID).querySelector(".borrow-btn");
         borrowBtn.textContent = "Borrowed";
         borrowBtn.disabled = true;
         borrowBtn.classList.remove("btn-primary");
         borrowBtn.classList.add("btn-secondary");
-
         let loans = JSON.parse(localStorage.getItem("my-loans")) || [];
-        loans.push(responseData.loan);
+        loans.push(loan);
         localStorage.setItem("my-loans", JSON.stringify(loans));
-        
     } catch (error) {
-        console.error("Failed to load Username: " + error);
-        alert("Failed to load Username: " + error.message);
-        window.location.href = '../dashboard.html';
+        console.error("Failed to borrow book: " + error);
     } 
 }
 
-async function getDatas() { 
-    loader.style.display = "flex"; 
+loader.style.display = "flex";
 
+async function loadData() {
     try {
-        await getUsername();
-        await getLoansList();
+        await Promise.all([
+            getUsername(),
+            getLoansList()
+        ]);
         await getBooks();
     } catch (err) {
         console.error("Error loading data:", err);
     } finally {
-        loader.style.display = "none"; 
+        loader.style.display = "none";
     }
 }
-
-getDatas();

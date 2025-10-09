@@ -8,12 +8,17 @@
     <script src="/js/auth.js" type="module"></script>
 </head>
 <body>
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">📚 Library Management System</div>
                 <nav class="nav">
-                    <a href="login.html">Login</a>
+                    <div id="login-check">
+                        <a href="login.html">Login</a>
+                    </div>
                 </nav>
             </div>
         </div>
@@ -29,15 +34,11 @@
                 </p>
                 
                 <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
-                    <a href="login.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        <a id="get-started-btn" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
                         Get Started
-                    </a>
-                    <a href="dashboard.html" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem;">
-                        View Demo
                     </a>
                 </div>
 
-                <!-- Features Grid -->
                 <div class="grid grid-3" style="margin-top: 4rem;">
                     <div class="card" style="text-align: center; padding: 2rem;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
@@ -66,5 +67,6 @@
             <p>&copy; 2025 Library Management System. Built for JavaScript Students.</p>
         </div>
     </footer>
+    <script src="./js/index.js"></script>
 </body>
 </html>
