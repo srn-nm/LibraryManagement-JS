@@ -121,7 +121,7 @@ async function getDatas() {
     try {
         await getUsername();
 
-        if (!bookId || isNaN(bookId)) {
+        if (!bookId ) {
             window.location.href = "../notfound.html";
             return;
         }

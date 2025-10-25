@@ -30,15 +30,33 @@ async function getUsername() {
 }
 
 async function returnLoan(id) {
+    const btn = document.querySelector(`button.return[data-id="${id}"]`);
+    if (!btn) return;
+
+    const btnText = btn.querySelector(".btn-text");
+    const spinner = btn.querySelector(".loading");
+
+    btnText.textContent = "";
+    spinner.classList.remove("hidden");
+    btn.disabled = true;
+
     try {
         await apiFetch(`/loans/${id}/return`, {
             method: "POST",
             body: JSON.stringify({ id }),
         });
+
         console.log("Book returned successfully");
-        getLoans(); 
+
+        localStorage.removeItem("my-loans");
+        localStorage.removeItem("my-loans_timestamp");
+
+        await getLoans();
     } catch (error) {
         console.error("Failed to return book:", error);
+        btnText.textContent = "Return";
+        spinner.classList.add("hidden");
+        btn.disabled = false;
     }
 }
 
@@ -57,8 +75,14 @@ async function getLoans() {
             const statusHTML = `<span class="status ${isActive ? "status-active" : "status-returned"}">
                 ${isActive ? "Active" : "Returned"}</span>`;
             const actionHTML = isActive
-                ? `<button class="btn btn-success btn-sm return" data-id="${loan.id}">Return</button>`
-                : `<button class="btn btn-secondary btn-sm" disabled>Returned</button>`;
+                ? `<button class="btn btn-success btn-sm return" data-id="${loan.id}">
+                    <span class="btn-text">Return</span>
+                    <span class="loading hidden"></span>
+                </button>`
+                : `<button class="btn btn-secondary btn-sm" disabled>
+                    <span class="btn-text">Returned</span>
+                    <span class="loading hidden"></span>
+                </button>`;  
 
             if (isActive) activeCount++;
             else returnedCount++;
